@@ -54,11 +54,7 @@ export interface Database {
             referencedColumns: ["project_id"]
           }
         ]
-      }
-    }
-  }
-}
-/*
+      },
       domains: {
         Row: {
           id: number
@@ -437,8 +433,8 @@ export interface Database {
           no_response: boolean | null
           processed: boolean
           processed_state:
-            | Database["public"]["Enums"]["query_stat_processed_state"]
-            | null
+          | Database["public"]["Enums"]["query_stat_processed_state"]
+          | null
           project_id: string
           prompt: string | null
           prompt_clear: string | null
@@ -458,8 +454,8 @@ export interface Database {
           no_response?: boolean | null
           processed?: boolean
           processed_state?:
-            | Database["public"]["Enums"]["query_stat_processed_state"]
-            | null
+          | Database["public"]["Enums"]["query_stat_processed_state"]
+          | null
           project_id: string
           prompt?: string | null
           prompt_clear?: string | null
@@ -479,8 +475,8 @@ export interface Database {
           no_response?: boolean | null
           processed?: boolean
           processed_state?:
-            | Database["public"]["Enums"]["query_stat_processed_state"]
-            | null
+          | Database["public"]["Enums"]["query_stat_processed_state"]
+          | null
           project_id?: string
           prompt?: string | null
           prompt_clear?: string | null
@@ -853,8 +849,8 @@ export interface Database {
           no_response: boolean | null
           processed: boolean | null
           processed_state:
-            | Database["public"]["Enums"]["query_stat_processed_state"]
-            | null
+          | Database["public"]["Enums"]["query_stat_processed_state"]
+          | null
           project_id: string | null
           prompt: string | null
           prompt_clear: string | null
@@ -876,8 +872,8 @@ export interface Database {
           no_response?: boolean | null
           processed?: boolean | null
           processed_state?:
-            | Database["public"]["Enums"]["query_stat_processed_state"]
-            | null
+          | Database["public"]["Enums"]["query_stat_processed_state"]
+          | null
           project_id?: string | null
           prompt?: string | null
           prompt_clear?: string | null
@@ -899,8 +895,8 @@ export interface Database {
           no_response?: boolean | null
           processed?: boolean | null
           processed_state?:
-            | Database["public"]["Enums"]["query_stat_processed_state"]
-            | null
+          | Database["public"]["Enums"]["query_stat_processed_state"]
+          | null
           project_id?: string | null
           prompt?: string | null
           prompt_clear?: string | null
@@ -1173,8 +1169,8 @@ export interface Database {
           id: string | null
           no_response: boolean | null
           processed_state:
-            | Database["public"]["Enums"]["query_stat_processed_state"]
-            | null
+          | Database["public"]["Enums"]["query_stat_processed_state"]
+          | null
           project_id: string | null
         }
         Relationships: [
@@ -1476,18 +1472,18 @@ export interface Database {
       membership_type: "viewer" | "admin"
       processed_type: "processed" | "ignored"
       query_stat_processed_state:
-        | "processed"
-        | "unprocessed"
-        | "errored"
-        | "skipped"
+      | "processed"
+      | "unprocessed"
+      | "errored"
+      | "skipped"
       source_type:
-        | "github"
-        | "motif"
-        | "website"
-        | "nango"
-        | "salesforce"
-        | "file-upload"
-        | "api-upload"
+      | "github"
+      | "motif"
+      | "website"
+      | "nango"
+      | "salesforce"
+      | "file-upload"
+      | "api-upload"
     }
     CompositeTypes: {
       [_ in never]: never
