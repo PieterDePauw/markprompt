@@ -55,6 +55,10 @@ export interface Database {
           }
         ]
       }
+    }
+  }
+}
+/*
       domains: {
         Row: {
           id: number
