@@ -6,8 +6,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { Database } from '@/types/supabase';
 
-const authorizedUsers =
-  JSON.parse(process.env.MARKPROMPT_AUTHORIZED_EMAIL_USERS) || JSON.parse('[]');
+const authorizedUsers = JSON.parse(
+  process.env.MARKPROMPT_AUTHORIZED_EMAIL_USERS || '[]',
+);
 
 export const canSendEmails = async (supabase: SupabaseClient<Database>) => {
   const {

@@ -28,6 +28,7 @@ import {
 
 import { GitHubIcon } from '@/components/icons/GitHub';
 import { MotifIcon } from '@/components/icons/Motif';
+import { NotionIcon } from '@/components/icons/Notion';
 import { SalesforceIcon } from '@/components/icons/Salesforce';
 import {
   DEFAULT_CHAT_COMPLETION_MODEL,
@@ -887,11 +888,11 @@ export const getIconForSource = (source: Pick<DbSource, 'type' | 'data'>) => {
     case 'nango': {
       const integrationId = (source.data as unknown as NangoSourceDataType)
         ?.integrationId;
-      if (
-        integrationId === 'salesforce' ||
-        integrationId === 'salesforce-sandbox'
-      ) {
+      if (integrationId?.startsWith('salesforce-')) {
         return SalesforceIcon;
+      }
+      if (integrationId?.startsWith('notion-')) {
+        return NotionIcon;
       }
       return Globe;
     }

@@ -1,9 +1,12 @@
-import { FC, JSXElementConstructor } from 'react';
+import cn from 'classnames';
+import Link from 'next/link';
+import { FC, JSXElementConstructor, ReactNode } from 'react';
 import Balancer from 'react-wrap-balancer';
 
 import { AlgoliaIcon } from '@/components/icons/brands/Algolia';
 import { FrontIcon } from '@/components/icons/brands/Front';
 import { HubspotIcon } from '@/components/icons/brands/Hubspot';
+import { JiraIcon } from '@/components/icons/brands/Jira';
 import { NotionIcon } from '@/components/icons/brands/Notion';
 import { SalesforceIcon } from '@/components/icons/brands/Salesforce';
 import { SlackIcon } from '@/components/icons/brands/Slack';
@@ -22,18 +25,24 @@ type IntegrationSpec = {
   description: string;
   Icon: JSXElementConstructor<any>;
   status?: 'dev' | 'soon';
+  href?: string;
 };
 
 const integrations: IntegrationSpec[] = [
+  {
+    name: 'GitHub',
+    description: 'Sync files in your repo',
+    Icon: GitHubIcon,
+  },
   {
     name: 'Salesforce Knowledge',
     description: 'Sync your knowledge articles',
     Icon: SalesforceIcon,
   },
   {
-    name: 'GitHub',
-    description: 'Sync files in your repo',
-    Icon: GitHubIcon,
+    name: 'Salesforce Case',
+    description: 'Sync your cases',
+    Icon: SalesforceIcon,
   },
   {
     name: 'Zendesk Articles',
@@ -53,6 +62,12 @@ const integrations: IntegrationSpec[] = [
     status: 'soon',
   },
   {
+    name: 'Atlassian Jira',
+    description: 'Sync your knowledge articles',
+    Icon: JiraIcon,
+    status: 'dev',
+  },
+  {
     name: 'Front Drafts',
     description: 'Automatically draft customer replies',
     Icon: FrontIcon,
@@ -62,7 +77,6 @@ const integrations: IntegrationSpec[] = [
     name: 'Notion',
     description: 'Sync your workspace pages',
     Icon: NotionIcon,
-    status: 'soon',
   },
   {
     name: 'Hubspot',
@@ -74,6 +88,7 @@ const integrations: IntegrationSpec[] = [
     name: 'Algolia',
     description: 'Combine LLM prompts with instant search',
     Icon: AlgoliaIcon,
+    href: '/blog/algolia',
   },
   {
     name: 'Discord',
@@ -88,9 +103,31 @@ const integrations: IntegrationSpec[] = [
   },
 ];
 
-const Card: FC<IntegrationSpec> = ({ name, description, status, Icon }) => {
+const Card: FC<IntegrationSpec> = ({
+  name,
+  description,
+  status,
+  href,
+  Icon,
+}) => {
+  const Comp = href
+    ? ({ className, children }: { className: string; children: ReactNode }) => {
+        return (
+          <Link
+            className={cn(
+              className,
+              'no-underline transition hover:bg-neutral-1000',
+            )}
+            href={href}
+          >
+            {children}
+          </Link>
+        );
+      }
+    : 'div';
+
   return (
-    <div className="not-prose rounded-md border border-neutral-900 p-6">
+    <Comp className="not-prose rounded-md border border-neutral-900 p-6">
       <div className="flex flex-row items-center gap-4">
         <div className="flex h-12 flex-none items-center justify-center">
           <Icon className="w-8 flex-none text-white" />
@@ -106,8 +143,10 @@ const Card: FC<IntegrationSpec> = ({ name, description, status, Icon }) => {
           )}
         </div>
       </div>
-      <h3 className="mt-4 text-sm text-neutral-500">{description}</h3>
-    </div>
+      <h3 className="mt-4 text-sm font-normal text-neutral-500">
+        {description}
+      </h3>
+    </Comp>
   );
 };
 

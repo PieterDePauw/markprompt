@@ -35,6 +35,7 @@ import { Segment } from '../ui/Segment';
 import { Slash } from '../ui/Slash';
 import { SystemStatusButton } from '../ui/SystemStatusButton';
 import { Tag } from '../ui/Tag';
+import { ContactWindow } from '../user/ChatWindow';
 
 const PricingCard = ({
   tier,
@@ -162,7 +163,7 @@ const LandingPage: FC<LandingPageProps> = ({ stars, status }) => {
 
   return (
     <>
-      <SharedHead title="Markprompt | Enterprise-Grade AI for Customer Experience Teams" />
+      <SharedHead title="Markprompt | AI infrastructure for customer experience teams" />
       {/* <div className="z-40 bg-fuchsia-700 py-1.5 px-6 sm:px-8">
         <Link
           href="/blog/markprompt-qa"
@@ -177,32 +178,37 @@ const LandingPage: FC<LandingPageProps> = ({ stars, status }) => {
         <LandingNavbar />
         <div className="animate-slide-up">
           <div className="grid grid-cols-1 gap-8 pb-24 sm:min-h-[calc(100vh-100px)] sm:grid-cols-5">
-            <div className="col-span-3 mt-12 flex flex-col justify-center 2xl:mt-0">
-              <Link href="/blog/feedback-flows">
+            <div className="col-span-3 mt-4 flex flex-col justify-center sm:mt-12 2xl:mt-0">
+              {/* <Link href="/blog/feedback-flows">
                 <Tag size="base" color="sky">
                   Introducing ticket hand-off →
                 </Tag>
-              </Link>
-              <h1 className="gradient-heading z-10 mt-6 text-left text-4xl leading-[36px] tracking-[-0.6px] sm:mr-[-100px] sm:text-5xl sm:leading-[64px]">
-                <Balancer>
-                  Enterprise-Grade AI for Customer Experience Teams
-                </Balancer>
+              </Link> */}
+              <h1 className="gradient-heading z-10 mt-6 text-left text-5xl leading-[56px] tracking-[-0.6px] sm:mr-[-200px] sm:text-6xl sm:leading-[64px] md:text-7xl">
+                <Balancer>AI infrastructure for CX teams</Balancer>
               </h1>
               <p className="z-20 mt-8 mr-[40px] max-w-screen-md text-left text-base text-neutral-500 sm:mt-4 sm:text-lg">
                 <Balancer ratio={0.5}>
-                  Connect any source of content, from public websites to
-                  internal knowledge bases, configure the design and tone, and
-                  deploy across all channels. In minutes, you have an AI chatbot
-                  that answers your customers&apos; questions, and drafts your
-                  support ticket replies.
+                  Connect all your sources of data, such as Salesforce Service
+                  Cloud, Zendesk, Notion pages and GitHub repositories, and use
+                  as context to automatically answer your users&apos; questions,
+                  deflect tickets and draft case replies.
                 </Balancer>
               </p>
               <div className="flex flex-col items-start justify-start gap-4 pt-8 sm:flex-row sm:items-center">
                 <Button variant="cta" buttonSize="lg" href="/signup">
-                  Start for free
+                  Start now
                 </Button>
                 <div className="hidden sm:block">
-                  <Button
+                  <ContactWindow
+                    closeOnClickOutside
+                    Component={
+                      <Button variant="plain" buttonSize="lg">
+                        Contact sales
+                      </Button>
+                    }
+                  />
+                  {/* <Button
                     variant="plain"
                     buttonSize="lg"
                     href="https://github.com/motifland/markprompt"
@@ -212,7 +218,7 @@ const LandingPage: FC<LandingPageProps> = ({ stars, status }) => {
                     <span className="ml-2 text-neutral-600">
                       {formatNumStars(stars)}
                     </span>
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
               <p className="pt-8 text-left text-sm text-neutral-700 sm:pt-8 sm:text-base">
@@ -241,7 +247,7 @@ const LandingPage: FC<LandingPageProps> = ({ stars, status }) => {
       </div>
       <VideoSection />
       <StepsSection />
-      <div className="relative z-0 mx-auto min-h-screen max-w-screen-xl px-6 pt-8 sm:px-8 sm:pt-24">
+      {/* <div className="relative z-0 mx-auto min-h-screen max-w-screen-xl px-6 pt-8 sm:px-8 sm:pt-24">
         <h2 className="gradient-heading mt-32 text-center text-4xl sm:mt-64">
           <Balancer>Combine with instant search</Balancer>
         </h2>
@@ -263,7 +269,7 @@ const LandingPage: FC<LandingPageProps> = ({ stars, status }) => {
             src={`/static/icons/algolia.svg`}
           />
         </div>
-      </div>
+      </div> */}
       <div className="relative z-0 mx-auto min-h-screen max-w-screen-xl px-6 pt-8 sm:px-8 sm:pt-24">
         <h2 className="gradient-heading mt-32 text-center text-4xl sm:mt-64">
           <Balancer>Track usage, get feedback, improve content</Balancer>
@@ -358,21 +364,21 @@ const LandingPage: FC<LandingPageProps> = ({ stars, status }) => {
             /> */}
             <PricingCard
               tier={PLACEHOLDER_ENTERPRISE_TIER}
-              cta="Contact Sales"
+              cta="Contact sales"
               onCtaClick={() => {
                 emitter.emit(EVENT_OPEN_CONTACT);
               }}
               priceLabel="Custom"
             />
           </div>
-          <p className="mt-12 rounded-lg border border-neutral-900 px-6 py-4 text-center text-sm text-neutral-500">
+          {/* <p className="mt-12 rounded-lg border border-neutral-900 px-6 py-4 text-center text-sm text-neutral-500">
             * 1 token ≈ ¾ words. 1 document ≈ 1200 tokens.{' '}
             <Link className="subtle-underline" href="/docs#what-are-tokens">
               Learn more
             </Link>
-          </p>
+          </p> */}
         </div>
-        <div className="flex flex-col items-center">
+        {/* <div className="flex flex-col items-center">
           <h2 className="gradient-heading mt-40 text-center text-4xl">
             Open source
           </h2>
@@ -395,9 +401,26 @@ const LandingPage: FC<LandingPageProps> = ({ stars, status }) => {
               </span>
             </Button>
           </div>
+        </div> */}
+        <div className="flex flex-col items-center">
+          <h2 className="gradient-heading mt-64 text-center text-3xl sm:text-5xl">
+            Customer experience reimagined.
+            <br />
+            Get started now.
+          </h2>
+          <div className="mt-12">
+            <ContactWindow
+              closeOnClickOutside
+              Component={
+                <Button variant="cta" buttonSize="lg">
+                  Contact sales
+                </Button>
+              }
+            />
+          </div>
         </div>
-        <div className="mt-48 grid grid-cols-1 items-center gap-8 border-t border-neutral-900/50 px-6 pt-12 pb-20 sm:grid-cols-2 sm:py-12 sm:px-8 lg:grid-cols-3">
-          <div className="flex flex-row items-center justify-center gap-6 text-sm text-neutral-500 md:justify-start">
+        <div className="mt-48 grid grid-cols-1 items-center gap-8 border-t border-neutral-900/50 px-6 pt-12 pb-20 sm:py-12 sm:px-8 lg:grid-cols-3">
+          <div className="flex flex-row items-center justify-center gap-6 text-sm text-neutral-500 lg:justify-start">
             <SystemStatusButton status={status} />
             <Link href="/legal/terms">Terms</Link>
             <Link href="/legal/privacy">Privacy</Link>
@@ -410,14 +433,18 @@ const LandingPage: FC<LandingPageProps> = ({ stars, status }) => {
             </a>
           </div>
           <div className="hidden flex-row items-baseline justify-center gap-1 text-center text-sm text-neutral-500 lg:flex"></div>
-          <div className="mr-0 flex flex-row items-center justify-center gap-4 text-neutral-700 sm:mr-8 sm:justify-end md:mr-12 xl:mr-0">
-            <a
-              className="transition hover:text-neutral-500"
+          <div className="mr-0 flex flex-row items-center justify-center gap-4 text-neutral-700 lg:justify-end">
+            <Button
+              variant="plain"
+              buttonSize="sm"
               href="https://github.com/motifland/markprompt"
-              aria-label="Markprompt on GitHub"
+              Icon={GitHubIcon}
             >
-              <GitHubIcon className="h-5 w-5" />
-            </a>
+              Star on GitHub
+              <span className="ml-2 text-neutral-600">
+                {formatNumStars(stars)}
+              </span>
+            </Button>
             <a
               className="transition hover:text-neutral-500"
               href="https://x.com/markprompt"

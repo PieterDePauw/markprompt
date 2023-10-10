@@ -1,4 +1,3 @@
-import Nango from '@nangohq/frontend';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Popover from '@radix-ui/react-popover';
@@ -20,14 +19,17 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { MoreHorizontal, Globe, Upload, SettingsIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { isPresent } from 'ts-is-present';
 
+import NotionPagesAddSourceDialog from '@/components/dialogs/sources/NotionPages';
+import SalesforceCaseAddSourceDialog from '@/components/dialogs/sources/SalesforceCase';
 import StatusMessage from '@/components/files/StatusMessage';
 import { UpgradeNote } from '@/components/files/UpgradeNote';
 import * as GitHub from '@/components/icons/GitHub';
 import { MotifIcon } from '@/components/icons/Motif';
+import { NotionIcon } from '@/components/icons/Notion';
 import { SalesforceIcon } from '@/components/icons/Salesforce';
 import { ProjectSettingsLayout } from '@/components/layouts/ProjectSettingsLayout';
 import Onboarding from '@/components/onboarding/Onboarding';
@@ -37,12 +39,14 @@ import { SkeletonTable } from '@/components/ui/Skeletons';
 import { Tag } from '@/components/ui/Tag';
 import { deleteFiles } from '@/lib/api';
 import { useTrainingContext } from '@/lib/context/training';
+import emitter, { EVENT_OPEN_PLAN_PICKER_DIALOG } from '@/lib/events';
 import useFiles from '@/lib/hooks/use-files';
 import useProject from '@/lib/hooks/use-project';
 import useSources from '@/lib/hooks/use-sources';
 import useTeam from '@/lib/hooks/use-team';
 import useUsage from '@/lib/hooks/use-usage';
 import useUser from '@/lib/hooks/use-user';
+import { getTier, isEnterpriseOrCustomTier } from '@/lib/stripe/tiers';
 import {
   canDeleteSource,
   getAccessoryLabelForSource,
@@ -65,8 +69,8 @@ const GitHubAddSourceDialog = dynamic(
   { loading: () => Loading },
 );
 
-const SalesforceAddSourceDialog = dynamic(
-  () => import('@/components/dialogs/sources/Salesforce'),
+const SalesforceKnowledgeAddSourceDialog = dynamic(
+  () => import('@/components/dialogs/sources/SalesforceKnowledge'),
   { loading: () => Loading },
 );
 
@@ -222,6 +226,9 @@ const Data = () => {
   );
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
 
+  const tier = team && getTier(team);
+  const isEnterpriseTier = !tier || isEnterpriseOrCustomTier(tier);
+
   const columnHelper = createColumnHelper<{
     id: DbFile['id'];
     path: string;
@@ -283,12 +290,6 @@ const Data = () => {
             <button
               className="w-full overflow-hidden truncate text-left outline-none"
               onClick={() => {
-                if (!value.token_count) {
-                  toast.success(
-                    'To view the file content, retrain with the "force retrain" setting on.',
-                  );
-                  return;
-                }
                 setOpenFilePath(value.path);
                 setEditorOpen(true);
               }}
@@ -591,7 +592,7 @@ const Data = () => {
                 <span className="truncate">Connect GitHub repo</span>
               </button>
             </GitHubAddSourceDialog>
-            <SalesforceAddSourceDialog>
+            <NotionPagesAddSourceDialog>
               <button
                 className={cn(
                   'flex flex-row items-center gap-2 py-1 text-left text-sm text-neutral-300 outline-none transition hover:text-neutral-400',
@@ -600,10 +601,68 @@ const Data = () => {
                   },
                 )}
               >
-                <SalesforceIcon className="h-4 w-4 flex-none text-neutral-500" />
-                <span className="truncate">Connect Salesforce Knowledge</span>
+                <NotionIcon className="h-4 w-4 flex-none text-neutral-500" />
+                <span className="flex-grow truncate">Connect Notion</span>
               </button>
-            </SalesforceAddSourceDialog>
+            </NotionPagesAddSourceDialog>
+            <SalesforceKnowledgeAddSourceDialog>
+              <button
+                className={cn(
+                  'flex flex-row items-center gap-2 py-1 text-left text-sm text-neutral-300 outline-none transition hover:text-neutral-400',
+                  {
+                    'pointer-events-none opacity-50': !canAddMoreContent,
+                  },
+                )}
+                {...(!isEnterpriseTier
+                  ? {
+                      onClick: (e) => {
+                        e.preventDefault();
+                        emitter.emit(EVENT_OPEN_PLAN_PICKER_DIALOG);
+                      },
+                    }
+                  : {})}
+              >
+                <SalesforceIcon className="h-4 w-4 flex-none text-neutral-500" />
+                <span className="flex-grow truncate">
+                  Connect Salesforce Knowledge
+                </span>
+
+                {!isEnterpriseTier && (
+                  <div className="flex-nonw">
+                    <Tag>Enterprise</Tag>
+                  </div>
+                )}
+              </button>
+            </SalesforceKnowledgeAddSourceDialog>
+            <SalesforceCaseAddSourceDialog>
+              <button
+                className={cn(
+                  'flex flex-row items-center gap-2 py-1 text-left text-sm text-neutral-300 outline-none transition hover:text-neutral-400',
+                  {
+                    'pointer-events-none opacity-50': !canAddMoreContent,
+                  },
+                )}
+                {...(!isEnterpriseTier
+                  ? {
+                      onClick: (e) => {
+                        e.preventDefault();
+                        emitter.emit(EVENT_OPEN_PLAN_PICKER_DIALOG);
+                      },
+                    }
+                  : {})}
+              >
+                <SalesforceIcon className="h-4 w-4 flex-none text-neutral-500" />
+                <span className="flex-grow truncate">
+                  Connect Salesforce Case
+                </span>
+
+                {!isEnterpriseTier && (
+                  <div className="flex-nonw">
+                    <Tag>Enterprise</Tag>
+                  </div>
+                )}
+              </button>
+            </SalesforceCaseAddSourceDialog>
             <MotifAddSourceDialog>
               <button
                 className={cn(

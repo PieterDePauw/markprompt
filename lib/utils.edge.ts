@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // Edge utilities. Cannot run Node APIs.
 
 export const getAppHost = (subdomain?: string, forceProduction?: boolean) => {
@@ -93,7 +92,7 @@ export const deepMerge = (target: any | null, source: any | null) => {
   for (const key of Object.keys(result)) {
     result[key] =
       typeof (target || {})[key] == 'object' &&
-        typeof (source || {})[key] == 'object'
+      typeof (source || {})[key] == 'object'
         ? deepMerge((target || {})[key], (source || {})[key])
         : structuredClone(result[key]);
   }

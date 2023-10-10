@@ -1,4 +1,3 @@
-import Nango from '@nangohq/frontend';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import {
@@ -23,16 +22,17 @@ import useProject from '@/lib/hooks/use-project';
 import useSources from '@/lib/hooks/use-sources';
 import useUsage from '@/lib/hooks/use-usage';
 import useUser from '@/lib/hooks/use-user';
+import { getConnectionId } from '@/lib/integrations/nango';
 import {
   deleteConnection,
+  getNangoClientInstance,
   setMetadata,
   sourceExists,
-} from '@/lib/integrations/nango';
+} from '@/lib/integrations/nango.client';
 import {
   SalesforceEnvironment,
   SalesforceNangoMetadata,
-  getConnectionId,
-  getIntegrationId,
+  getCaseIntegrationId,
 } from '@/lib/integrations/salesforce';
 import { getLabelForSource } from '@/lib/utils';
 
@@ -42,12 +42,9 @@ const DocsLimit = dynamic(() => import('@/components/files/DocsLimit'), {
   loading: () => Loading,
 });
 
-const nango = new Nango({
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  publicKey: process.env.NEXT_PUBLIC_NANGO_PUBLIC_KEY!,
-});
+const nango = getNangoClientInstance();
 
-type SalesforceSourceProps = {
+type SalesforceCaseSourceProps = {
   clearPrevious?: boolean;
   openPricingAsDialog?: boolean;
   onDidAddSource: () => void;
@@ -59,7 +56,9 @@ const prepareFields = (input: string) => {
   return input.split(',').map((v) => v.trim());
 };
 
-const SalesforceSource: FC<SalesforceSourceProps> = ({ onDidAddSource }) => {
+const SalesforceCaseSource: FC<SalesforceCaseSourceProps> = ({
+  onDidAddSource,
+}) => {
   const { project } = useProject();
   const { user } = useUser();
   const { mutate: mutateSources } = useSources();
@@ -77,7 +76,7 @@ const SalesforceSource: FC<SalesforceSourceProps> = ({ onDidAddSource }) => {
       }
 
       try {
-        const integrationId = getIntegrationId(environment);
+        const integrationId = getCaseIntegrationId(environment);
 
         const newSource = await addSource(project.id, 'nango', {
           integrationId,
@@ -123,7 +122,7 @@ const SalesforceSource: FC<SalesforceSourceProps> = ({ onDidAddSource }) => {
           // If there is an error, make sure to delete the connection
           await deleteConnection(
             project.id,
-            getIntegrationId(environment),
+            getCaseIntegrationId(environment),
             newSource.id,
           );
           await deleteSource(project.id, newSource.id);
@@ -410,7 +409,7 @@ const SalesforceSource: FC<SalesforceSourceProps> = ({ onDidAddSource }) => {
   );
 };
 
-const SalesforceAddSourceDialog = ({
+const SalesforceCaseAddSourceDialog = ({
   openPricingAsDialog,
   onDidAddSource,
   children,
@@ -429,14 +428,14 @@ const SalesforceAddSourceDialog = ({
         <Dialog.Content className="animate-dialog-slide-in dialog-content flex h-[90%] max-h-[720px] w-[90%] max-w-[500px] flex-col">
           <div className="flex-none">
             <Dialog.Title className="dialog-title flex-none">
-              Connect Salesforce Knowledge
+              Connect Salesforce Case
             </Dialog.Title>
             <div className="dialog-description flex flex-none flex-col gap-2 border-b border-neutral-900 pb-4">
-              <p>Sync content from a Salesforce Knowledge base.</p>
+              <p>Sync content from a Salesforce Case base.</p>
             </div>
           </div>
           <div className="flex-grow overflow-y-hidden">
-            <SalesforceSource
+            <SalesforceCaseSource
               openPricingAsDialog={openPricingAsDialog}
               onDidAddSource={() => {
                 setDialogOpen(false);
@@ -450,4 +449,4 @@ const SalesforceAddSourceDialog = ({
   );
 };
 
-export default SalesforceAddSourceDialog;
+export default SalesforceCaseAddSourceDialog;
