@@ -21,9 +21,9 @@ import {
 
 type Data =
   | {
-      status?: string;
-      error?: string;
-    }
+    status?: string;
+    error?: string;
+  }
   | QueryStatsProcessingResponseData;
 
 const allowedMethods = ['GET'];
@@ -85,9 +85,8 @@ const redactSensitiveInfo = async (
   const res = await fetch(getCompletionsUrl(model), {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${
-        (byoOpenAIKey || process.env.OPENAI_API_KEY) ?? ''
-      }`,
+      Authorization: `Bearer ${(byoOpenAIKey || process.env.OPENAI_API_KEY) ?? ''
+        }`,
     },
     method: 'POST',
     body: JSON.stringify(payload),
